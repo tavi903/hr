@@ -1,0 +1,10 @@
+= Human Resources Docs
+:doctype: book
+:toclevels: 4
+:toc:
+:icons: font
+:math: asciimath
+:stem: asciimath
+:source-highlighter: rouge
+
+include::introduction.adoc[]
