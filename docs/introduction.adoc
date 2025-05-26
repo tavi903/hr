@@ -10,7 +10,9 @@ The sample company is regionally diverse, so it tracks the locations of its ware
 
 In places where the departments and warehouses are located, the company records details such as the country name, currency symbol, currency name, and the region where the country is located geographically.
 
+image::img/schema.png[]
+
 == RoadMap
 
-- add scripts to create schema and add data
-- create project skeleton
+- add all Entities
+- add all Repositories

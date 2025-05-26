@@ -1,5 +1,5 @@
 = Human Resources Docs
-:doctype: book
+:doctype: article
 :toclevels: 4
 :toc:
 :icons: font
