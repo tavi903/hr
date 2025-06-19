@@ -8,12 +8,14 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
-@Table(name = "regions")
+@Table(name = "JOBS")
 @Data
 @EqualsAndHashCode(of = "id")
 @ToString
-public class Region {
+public class Job {
     @Id
-    private Long id;
-    private String regionName;
+    private String id;
+    private String jobTitle;
+    private Double minSalary;
+    private Double maxSalary;
 }

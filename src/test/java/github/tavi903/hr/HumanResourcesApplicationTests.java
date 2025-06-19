@@ -1,18 +1,32 @@
 package github.tavi903.hr;
 
-import github.tavi903.hr.entity.PrimaryKey;
-import github.tavi903.hr.repository.RegionRepository;
+import github.tavi903.hr.repository.ICountryRepository;
+import github.tavi903.hr.repository.IDepartmentRepository;
+import github.tavi903.hr.repository.IEmployeeRepository;
+import github.tavi903.hr.repository.IJobHistoryRepository;
+import github.tavi903.hr.repository.IJobRepository;
+import github.tavi903.hr.repository.IRegionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@DataJpaTest
 @ActiveProfiles("local")
 class HumanResourcesApplicationTests {
 
 	@Autowired
-	private RegionRepository regionRepository;
+	private IRegionRepository regionRepository;
+	@Autowired
+	private ICountryRepository countryRepository;
+	@Autowired
+	private IJobRepository jobRepository;
+	@Autowired
+	private IJobHistoryRepository jobHistoryRepository;
+	@Autowired
+	private IDepartmentRepository departmentRepository;
+	@Autowired
+	private IEmployeeRepository employeeRepository;
 
 	@Test
 	void contextLoads() {
@@ -20,8 +34,10 @@ class HumanResourcesApplicationTests {
 
 	@Test
 	void tryRepo() {
-		System.out.println(regionRepository.findAll());
-		System.out.println(regionRepository.findById(PrimaryKey.of(30L)));
+//		countryRepository.findById("IT");
+//		System.out.println(jobRepository.findAll());
+//		System.out.println(jobHistoryRepository.findAll());
+		System.out.println(jobHistoryRepository.findByPrimaryKey_EmployeeId(101L));
 	}
 
 }

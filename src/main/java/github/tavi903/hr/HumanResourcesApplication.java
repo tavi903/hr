@@ -7,9 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 import java.sql.SQLException;
 
+@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 @SpringBootApplication
 public class HumanResourcesApplication {
 
@@ -17,10 +19,10 @@ public class HumanResourcesApplication {
 		SpringApplication.run(HumanResourcesApplication.class, args);
 	}
 
-	@Profile("local")
+	@Profile(AppConstants.PROFILE_LOCAL)
 	@Bean(
-			initMethod = "start",
-			destroyMethod = "stop"
+		initMethod = "start",
+		destroyMethod = "stop"
 	)
 	public Server h2Server(@Autowired Environment env) throws SQLException {
 		return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9090");

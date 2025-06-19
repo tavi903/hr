@@ -12,7 +12,23 @@ In places where the departments and warehouses are located, the company records 
 
 image::img/schema.png[]
 
-== RoadMap
+== DDD
 
-- add all Entities
-- add all Repositories
+Two kind of people will use the application: HR and Admin.
+
+The Admins can do everything inside the application:
+
+- create/modify a Region, a Country, a Location, a Department, a Job, an Employee
+- they can fire an Employee or a Group of Employees (for example closing a department or location)
+- they can move a group of Employees between departments
+- they can retrieve some data: for example advanced search for employees (even extract a CSV)
+- they can retrieve summary data: number of employee currently in the company, the variation of employees
+during last year, last three years, also same data but for job type, and department, and country
+- they can decide a raise for all jobs
+
+The HR:
+
+- can search employees, insert and modify
+- they have information about the variation of employees in the last year, three year
+group by job type, country, department etc.
+- they have information about turnover rate for every department, location, country etc.
