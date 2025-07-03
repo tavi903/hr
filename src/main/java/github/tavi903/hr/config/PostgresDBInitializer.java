@@ -1,4 +1,4 @@
-package github.tavi903.hr;
+package github.tavi903.hr.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

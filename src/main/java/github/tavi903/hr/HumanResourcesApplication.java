@@ -1,5 +1,6 @@
 package github.tavi903.hr;
 
+import github.tavi903.hr.config.AppConstants;
 import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

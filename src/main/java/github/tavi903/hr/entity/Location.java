@@ -1,9 +1,12 @@
 package github.tavi903.hr.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +19,8 @@ import lombok.ToString;
 @ToString
 public class Location {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "locationSeq")
+    @SequenceGenerator(name = "locationSeq", sequenceName = "locations_seq", allocationSize = 100)
     private Long id;
     private String streetAddress;
     private String postalCode;

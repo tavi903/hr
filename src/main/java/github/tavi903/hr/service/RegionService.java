@@ -1,5 +1,6 @@
 package github.tavi903.hr.service;
 
+import github.tavi903.hr.HrException;
 import github.tavi903.hr.dto.RegionDto;
 import github.tavi903.hr.entity.Region;
 import github.tavi903.hr.mapper.IRegionMapper;
@@ -13,4 +14,10 @@ public class RegionService extends BaseService<Long, Region, RegionDto> {
         super(repository, mapper);
     }
 
+    public RegionDto update(RegionDto regionDto) {
+        if (regionDto.getId() == null || repository.findById(regionDto.getId()).isEmpty()) {
+            throw new HrException("Cannot update Region, id not present!");
+        }
+        return super.createOrUpdate(regionDto);
+    }
 }

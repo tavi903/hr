@@ -12,6 +12,12 @@ ADD ( CONSTRAINT reg_id_pk
        		 PRIMARY KEY (id)
     ) ;
 
+CREATE SEQUENCE regions_seq
+ START WITH     4200
+ INCREMENT BY   100
+ MAXVALUE       9900
+ ;
+
 CREATE TABLE countries
     ( id      CHAR(2)
        CONSTRAINT  country_id_nn NOT NULL

@@ -18,14 +18,19 @@ public abstract class BaseService<ID, E, DTO> {
     protected final JpaRepository<E, ID> repository;
     protected final IBaseMapper<E, DTO> mapper;
 
-    @SafeVarargs
-    public final List<DTO> createOrUpdate(E... entities) {
-        return mapper.fromEntities(repository.saveAll(Arrays.asList(entities)));
+    public DTO createOrUpdate(DTO dto) {
+        E entity = mapper.fromDto(dto);
+        return mapper.fromEntity(repository.save(entity));
     }
 
-    @SafeVarargs
-    public final void delete(E... entities) {
-        repository.deleteAll(Arrays.asList(entities));
+    public List<DTO> createOrUpdate(DTO... dtos) {
+        List<E> entities = mapper.fromDtos(Arrays.asList(dtos));
+        return mapper.fromEntities(repository.saveAll(entities));
+    }
+
+    public void delete(DTO... dtos) {
+        List<E> entities = mapper.fromDtos(Arrays.asList(dtos));
+        repository.deleteAll(entities);
     }
 
     public Page<DTO> findAll(Pageable pageable) {
