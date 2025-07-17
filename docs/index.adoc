@@ -8,3 +8,5 @@
 :source-highlighter: rouge
 
 include::introduction.adoc[]
+
+include::problems.adoc[]

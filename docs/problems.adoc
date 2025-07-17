@@ -1,0 +1,16 @@
+== Problems
+
+4/7/2025
+
+I have created this bean PostgresDBInitializer with a `@PostConstruct` logic to drop and create public schema with Postgres
+(I want a simple method not to set up Fliway or Liquibase).
+I run into a problem, the sequence generator of Departments have an increment of 10 on the DB while is 100 inside the Java Entity. I expected
+when App is running to clear the schema and recreate the sequence with 100 of increment. Unfortunately the `@PostConstruct` logic runs after
+the EntityManagerFactory is created and Entity are checked. So the problems still remains. It's not easy to fix, because the `@DependOn` Spring
+annotation just works by setting the bean creation after another one, not before.
+
+What about ApplicationRunner et simila? They run after the creation of the context.
+When context is created:
+- Calling InitializingBean's afterPropertiesSet() and @PostConstruct methods
+
+I resolve this issue by implementing a SpringBoot Hook. So it's very useful to keep in mind this possibility.

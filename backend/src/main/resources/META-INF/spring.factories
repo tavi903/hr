@@ -1,0 +1,1 @@
+org.springframework.boot.SpringApplicationRunListener=github.tavi903.hr.config.PostgresDBInitializer

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{common::head}"></head>
+<body class="w3-light-grey">
+    <div th:replace="~{common::topbar}"></div>
+    <nav th:replace="~{common::sidebar}"></nav>
+
+    <div class="w3-main" style="margin-left:300px;margin-top:43px;" id="pageContent">
+
+        <header class="w3-container" style="padding-top:22px">
+            <h5><b><i class="fa fa-bullseye fa-fw"></i>  Geo</b></h5>
+        </header>
+
+        <div th:replace="~{common::table (${regionTable}, regionTable)}"></div>
+
+        <div class="w3-modal" id="region-modal-form" style="display:none">
+            <div class="w3-modal-content">
+                <div class="w3-container w3-blue">
+                        <h2>Region Form</h2>
+                </div>
+                <div th:if="${error} != null" class="w3-panel w3-display-container w3-red">
+                    <span onclick="this.parentElement.style.display='none'"
+                          class="w3-button w3-large w3-red w3-display-topright">X</span>
+                    <h3>Error!</h3>
+                    <p><pre th:text="${error}"></pre></p>
+                </div>
+                <form class="w3-container">
+
+                    <label>Region Id</label>
+                    <input id="regionId" name="id" class="w3-input" type="text">
+
+                    <label>Region Name</label>
+                    <input id="regionName" name="regionName" class="w3-input" type="text">
+                    <p>
+                        <button class="w3-btn w3-round w3-red" onclick="hideRegionModal()">Cancel</button>
+                        <input th:attr="formaction=${(modalType == 'modification' or modalType == null) ? '/region/update' : '/region/create'}" id="submitRegionForm" class="w3-button w3-round w3-green" type="submit" formmethod="post" formenctype="application/x-www-form-urlencoded" value="Save">
+                    </p>
+                </form>
+
+            </div>
+        </div>
+        <script th:inline="javascript">
+           if ([[${error}]] != null) {
+                document.addEventListener('DOMContentLoaded', function() {
+                    regionModalForm.style.display = "block";
+                    jsonCurrentRegion = [[${currentRegion ?: ""}]];
+                    if (jsonCurrentRegion != "") {
+                        currentRegion = JSON.parse(jsonCurrentRegion);
+                        document.getElementById('regionId').value = currentRegion.id;
+                        document.getElementById('regionName').value = currentRegion.regionName;
+                    }
+                });
+           }
+           regionModalForm = document.getElementById('region-modal-form');
+           function hideRegionModal() {
+               regionModalForm.style.display = 'none';
+           }
+           function showRegionModal() {
+               regionModalForm.style.display = 'block';
+           }
+           function populateRegionForm(event) {
+               row = regionTable[event.detail.numRow];
+               document.getElementById('regionId').value = row.id;
+               document.getElementById('regionName').value = row.regionName;
+           }
+           document.getElementById('regionTable')
+               .addEventListener('modifyModal', event => {
+                    populateRegionForm(event);
+                    document.getElementById('submitRegionForm').formAction = "/region/update";
+                    showRegionModal();
+               });
+            document.getElementById('regionTable')
+               .addEventListener('createModal', event => {
+                    document.getElementById('submitRegionForm').formAction = "/region/create";
+                    showRegionModal();
+               });
+        </script>
+    </div>
+
+</body>
+</html>
