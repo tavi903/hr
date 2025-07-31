@@ -9,20 +9,18 @@ import lombok.Value;
 @Value
 public class LocationDto {
     Long id;
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Street Address Cannot Be Empty!")
+    @NotNull(message = "Street Address Cannot Be Empty!")
     String streetAddress;
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Postal Code Cannot Be Empty!")
+    @NotNull(message = "Postal Code Cannot Be Empty!")
     String postalCode;
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "City Cannot Be Empty!")
+    @NotNull(message = "City Cannot Be Empty!")
     String city;
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "State Province Cannot Be Empty!")
+    @NotNull(message = "State Province Be Empty!")
     String stateProvince;
-    @NotBlank
-    @NotNull
     String countryId;
     String countryName;
 }

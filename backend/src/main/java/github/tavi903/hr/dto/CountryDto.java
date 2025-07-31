@@ -10,12 +10,12 @@ import lombok.Value;
 @Builder
 @Value
 public class CountryDto {
-    @NotBlank
-    @Size(max = 2)
-    @Pattern(regexp = "[A-Z]+")
+    @NotBlank(message = "Country Id Cannot Be Blank!")
+    @Size(max = 2, message = "Country Id Should Be Just two Letters.")
+    @Pattern(regexp = "[A-Z]+", message = "Country Id Should be just Uppercase letters.")
     String id;
     @NotBlank
-    @Pattern(regexp = "[A-Za-z ]+")
+    @Pattern(regexp = "[A-Za-z ]+", message = "Country Name Should Be Just Characters with Spaces.")
     String countryName;
     @NotNull
     Long regionId;

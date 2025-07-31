@@ -6,6 +6,9 @@ import github.tavi903.hr.entity.Country;
 import github.tavi903.hr.mapper.ICountryMapper;
 import github.tavi903.hr.repository.ICountryRepository;
 import github.tavi903.hr.repository.IRegionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +30,25 @@ public class CountryService extends BaseService<String, Country, CountryDto> {
     }
 
     public CountryDto createOrUpdate(CountryDto countryDto) {
-        if (regionRepository.findById(countryDto.getRegionId()).isEmpty())
+        if (!regionRepository.existsById(countryDto.getRegionId()))
             throw new HrException("Region with id " + countryDto.getRegionId() + " does not exist.");
         return super.createOrUpdate(countryDto);
     }
 
-    public List<CountryDto> findByRegionId(Long regionId) {
-        Sort sort = Sort.sort(Country.class).by(Country::getCountryName).ascending();
+    public Page<CountryDto> findByRegionId(Long regionId, Pageable pageable) {
         if (regionId == null) {
-            return mapper.fromEntities(countryRepository.findAll(sort));
+            Page<Country> countriesPage = countryRepository.findAll(pageable);
+            return new PageImpl<>(
+                    mapper.fromEntities(countriesPage.getContent()),
+                    pageable,
+                    countriesPage.getTotalElements()
+            );
         }
-        return mapper.fromEntities(countryRepository.findAllByRegion_id(regionId, sort));
+        Page<Country> countriesByRegion = countryRepository.findAllByRegion_id(regionId, pageable);
+        return new PageImpl<>(
+                mapper.fromEntities(countriesByRegion.getContent()),
+                pageable,
+                countriesByRegion.getTotalElements()
+        );
     }
 }

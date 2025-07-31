@@ -100,7 +100,7 @@ public class EmployeeService extends BaseService<Long, Employee, EmployeeDto> {
 
     public Page<EmployeeDto> searchEmployees(EmployeeSearchDto searchDto, Pageable pageable) {
         Specification<Employee> employeeSpecification = EmployeeSpecs.fromSearchDto(searchDto);
-        Page<Employee> employees = employeeRepository.findAll(employeeSpecification, EmployeeSpecs.fromSearchDto(null, searchDto), pageable);
+        Page<Employee> employees = employeeRepository.findAll(employeeSpecification, EmployeeSpecs.countFromSearchDto(searchDto), pageable);
         return new PageImpl<>(
           mapper.fromEntities(employees.getContent()),
           pageable,

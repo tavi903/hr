@@ -47,7 +47,11 @@ public class EmployeeSpecs {
         return fromSearchDto(spec, searchDto);
     }
 
-    public static Specification<Employee> fromSearchDto(Specification<Employee> spec, EmployeeSearchDto searchDto) {
+    public static Specification<Employee> countFromSearchDto(EmployeeSearchDto searchDto) {
+        return fromSearchDto(null, searchDto);
+    }
+
+    private static Specification<Employee> fromSearchDto(Specification<Employee> spec, EmployeeSearchDto searchDto) {
         if (spec == null)
             spec = Specification.not(null);
         if (searchDto == null)

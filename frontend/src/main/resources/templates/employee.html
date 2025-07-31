@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{common::head}"></head>
+<body onclick="sessionStorage.setItem('scrollPosition', window.scrollY)" class="w3-light-grey">
+    <script th:src="@{/js/table-modal.js}"></script>
+    <script th:src="@{/js/table-search-pagination.js}"></script>
+    <div th:replace="~{common::topbar}"></div>
+    <nav th:replace="~{common::sidebar}"></nav>
+
+    <div class="w3-main" style="margin-top:43px;" id="pageContent">
+
+        <header class="w3-container" style="padding-top:22px">
+            <h5><b><i class="fa fa-users fa-fw"></i>  Employee</b></h5>
+        </header>
+
+        <div th:replace="~{common::table (${employeeTable}, employeeTable)}"></div>
+    </div>
+
+</body>
+</html>

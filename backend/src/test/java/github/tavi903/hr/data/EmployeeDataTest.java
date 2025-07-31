@@ -69,7 +69,8 @@ public class EmployeeDataTest {
     void given_SearchDto_when_Retrieved_thenIsOk() {
         EmployeeSearchDto itProg = EmployeeSearchDto.builder().jobId("SH_CLERK").build();
         Pageable pageable = PageRequest.of(0, 20, Sort.sort(Employee.class).by(Employee::getLastName).ascending());
-        employeeRepository.findAll(EmployeeSpecs.fromSearchDto(itProg), pageable).forEach(employee -> System.out.println(employee.getFirstName()));
+        employeeRepository.findAll(EmployeeSpecs.fromSearchDto(itProg), EmployeeSpecs.countFromSearchDto(itProg), pageable)
+                .forEach(employee -> System.out.println(employee.getFirstName()));
     }
 
     private Specification<Employee> joinFetch() {

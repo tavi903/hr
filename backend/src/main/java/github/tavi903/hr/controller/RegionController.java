@@ -5,6 +5,7 @@ import github.tavi903.hr.entity.Region;
 import github.tavi903.hr.service.RegionService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -44,11 +45,8 @@ public class RegionController {
 
     @RolesAllowed(HR_ROLE)
     @GetMapping(value = "get-all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RegionDto> getAll() {
-        return regionService.findAll(
-                        Pageable.unpaged(Sort.sort(Region.class).by(Region::getRegionName).ascending())
-                )
-                .getContent();
+    public Page<RegionDto> getAll(Pageable pageable) {
+        return regionService.findAll(pageable);
     }
 
 }

@@ -5,9 +5,86 @@
     <div th:insert="~{common::topbar}"></div>
     <nav th:insert="~{common::sidebar}"></nav>
     <!-- !PAGE CONTENT! -->
-    <div class="w3-main" style="margin-left:300px;margin-top:43px;" id="pageContent">
+    <div class="w3-main" style="margin-top:43px;" id="pageContent">
         <header class="w3-container" style="padding-top:22px">
             <h5><b><i class="fa fa-dashboard"></i>  Home</b></h5>
+
+            <div class="w3-flex" style="gap:10%; flex-wrap:wrap">
+                <div class="flex-item2">
+                    <p>
+                        <label style="font-size:5em" class="w3-cursive" th:text="${summaryData.numEmployees}"></label>
+                        <label># Of Employees</label>
+                    </p>
+                </div>
+                <div class="flex-item2">
+                    <p>
+                        <label style="font-size:5em" class="w3-cursive" th:text="${summaryData.numCountries}"></label>
+                        <label># Of Countries</label>
+                    </p>
+                </div>
+                <div class="flex-item2">
+                    <p>
+                        <label style="font-size:5em" class="w3-cursive" th:text="${summaryData.numCities}"></label>
+                        <label># Of Cities</label>
+                    </p>
+                </div>
+            </div>
+
+            <div class="w3-flex" style="gap:10%; flex-wrap:wrap; height: 400px;">
+                <canvas id="employeesByCountryCanvas"></canvas>
+                <canvas id="employeesByCityCanvas"></canvas>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script th:inline="javascript">
+                const countryCanvas = document.getElementById('employeesByCountryCanvas');
+                const cityCanvas = document.getElementById('employeesByCityCanvas');
+                countryLabels = [[${summaryData.countryLabels}]];
+                countryNumEmp = [[${summaryData.numEmployeesPerCountry}]];
+                cityLabels = [[${summaryData.cityLabels}]];
+                cityNumEmp = [[${summaryData.numEmployeesPerCity}]];
+
+                new Chart(countryCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: countryLabels,
+                        datasets: [{
+                            label: '# of Employees',
+                            data: countryNumEmp,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                         plugins: {
+                            title: {
+                                display: true,
+                                text: 'Number Of Employees Per Country'
+                            }
+                         }
+                    }
+                });
+
+                new Chart(cityCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: cityLabels,
+                        datasets: [{
+                            label: '# of Employees',
+                            data: cityNumEmp,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                         plugins: {
+                            title: {
+                                display: true,
+                                text: 'Number Of Employees Per City'
+                            }
+                         }
+                    }
+                });
+            </script>
         </header>
     </div>
 </body>

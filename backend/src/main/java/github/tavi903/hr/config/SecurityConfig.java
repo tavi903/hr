@@ -22,6 +22,7 @@ import org.springframework.security.config.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,7 +54,10 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(AbstractHttpConfigurer::disable);
+        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
+            authorizationManagerRequestMatcherRegistry.requestMatchers("/h2-console").hasRole(ADMIN_ROLE);
+            authorizationManagerRequestMatcherRegistry.requestMatchers("/h2-console/**").hasRole(ADMIN_ROLE);
             authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator").hasRole(ADMIN_ROLE);
             authorizationManagerRequestMatcherRegistry.requestMatchers("/actuator/**").hasRole(ADMIN_ROLE);
             authorizationManagerRequestMatcherRegistry.anyRequest().authenticated();

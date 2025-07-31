@@ -1,0 +1,23 @@
+.hide-sidebar {
+    transform: translateX(-100vw);
+}
+
+.pageContent-withSidebar {
+    transform: translateX(16vw);
+    width: 84vw;
+}
+
+@media (max-width:768px) {
+    .pageContent-withSidebar {
+        width: 0vw;
+    }
+    .sidebar-size {
+        width: 100vw;
+    }
+}
+
+@media (min-width:768px) {
+    .sidebar-size {
+        width: 16vw;
+    }
+}

@@ -2,13 +2,13 @@ package github.tavi903.hr.http.client;
 
 import github.tavi903.hr.dto.RegionDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 @FeignClient(value = "regionClient", url="${hr.backend.url}", path="/region")
 public interface RegionClient {
@@ -19,5 +19,5 @@ public interface RegionClient {
     RegionDto update(@RequestBody RegionDto regionDto);
 
     @GetMapping(value = "get-all", produces = MediaType.APPLICATION_JSON_VALUE)
-    List<RegionDto> getAll();
+    Page<RegionDto> getAll(Pageable pageable);
 }

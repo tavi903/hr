@@ -4,6 +4,8 @@ import github.tavi903.hr.dto.CountryDto;
 import github.tavi903.hr.service.CountryService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +36,8 @@ public class CountryController {
 
     @RolesAllowed(HR_ROLE)
     @GetMapping("get-all")
-    public List<CountryDto> getAll(@RequestParam(required = false) Long regionId) {
-        return countryService.findByRegionId(regionId);
+    public Page<CountryDto> getAll(@RequestParam(required = false) Long regionId, Pageable pageable) {
+        return countryService.findByRegionId(regionId, pageable);
     }
 
 }

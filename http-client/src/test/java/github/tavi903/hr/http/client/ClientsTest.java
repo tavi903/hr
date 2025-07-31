@@ -1,5 +1,6 @@
 package github.tavi903.hr.http.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import github.tavi903.hr.exception.HrException;
 import github.tavi903.hr.dto.DepartmentDto;
 import org.junit.jupiter.api.Assertions;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 
 @SuppressWarnings("all")
@@ -22,10 +24,12 @@ public class ClientsTest {
     private DepartmentClient departmentClient;
     @Autowired
     private RegionClient regionClient;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void given_CountryClient_when_GetAll_thenRetrieveAllTheData() {
-        Assertions.assertEquals(25, countryClient.getAll(null).size());
+        Assertions.assertEquals(25, countryClient.getAll(null, Pageable.unpaged()).getContent().size());
     }
 
     @Test
@@ -57,6 +61,6 @@ public class ClientsTest {
 
     @Test
     void given_getAllRegion_thenAllDataRetrieved() {
-        Assertions.assertEquals(5, regionClient.getAll().size());
+        Assertions.assertEquals(5, regionClient.getAll(Pageable.unpaged()).getContent().size());
     }
 }

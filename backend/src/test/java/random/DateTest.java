@@ -8,12 +8,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalField;
 import java.util.Date;
 
 /**
  * Classe usata per testare le API che permettono di lavorare con le date in Java.
  */
 public class DateTest {
+    private static final DateTimeFormatter SIMPLE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     @Test
     void thisIsDate() {
         // creates with number of milliseconds January 1, 1970, 00:00:00 GMT
@@ -31,6 +36,16 @@ public class DateTest {
 
     @Test
     void dateConversion() {
-        System.out.println(        Date.from(LocalDateTime.of(2016, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)).getTime());
+        System.out.println(
+                Date.from(LocalDateTime.of(2016, 1, 1, 0, 0).toInstant(ZoneOffset.UTC)).getTime()
+        );
+    }
+
+    @Test
+    void given_aString_when_Converting_thenIsADate() {
+        String dateStr = "2015-01-10";
+        LocalDate localDate = LocalDate.parse(dateStr, SIMPLE_DATE_FORMAT);
+        Date date = new Date(localDate.toEpochDay());
+        System.out.println(date);
     }
 }

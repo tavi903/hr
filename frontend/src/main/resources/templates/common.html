@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/w3.css" th:href="@{/css/w3.css}">
+    <link rel="stylesheet" href="/css/hr.css" th:href="@{/css/hr.css}">
     <link rel="stylesheet" href="/css/raleway.css" th:href="@{/css/raleway.css}">
     <link rel="stylesheet" href="/css/fontawesome.css" th:href="@{/css/fontawesome.css}">
     <link rel="stylesheet" href="/css/solid.css" th:href="@{/css/solid.css}">
@@ -15,61 +16,112 @@
 <div th:fragment="topbar" class="w3-bar w3-top w3-black w3-large" style="z-index:4">
     <button class="w3-bar-item w3-button w3-hover-none w3-hover-text-light-grey" onclick="hideOrShowSidebar();"><i class="fa fa-bars"></i>  Menu</button>
     <span class="w3-bar-item w3-right">Human Resources</span>
-    <script>
-        function hideOrShowSidebar() {
-            if (sidebar.classList.contains("w3-hide")) {
-                sidebar.classList.remove("w3-hide");
-                pageContent.style.marginLeft="300px";
-            } else {
-                sidebar.classList.add("w3-hide");
-                pageContent.style.marginLeft="0px";
+    <script th:inline="javascript">
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth <= 768)
+                sessionStorage.setItem('sidebarStatus', 'close');
+            scrollPosition = sessionStorage.getItem('scrollPosition');
+            window.scrollTo(0, scrollPosition != null ? scrollPosition : 0);
+            sidebarStatus = sessionStorage.getItem('sidebarStatus');
+            sidebarStatus = sidebarStatus != null ? sidebarStatus : 'open';
+            if (sidebarStatus == 'open')
+                showSidebar();
+            else
+                hideSidebar();
+            navElements = document.querySelectorAll("#sidebar > div > a");
+            for (navElement of navElements) {
+                if (window.location.href.split('?')[0].endsWith(navElement.href))
+                    navElement.classList.add('w3-blue');
             }
-        }
+        });
     </script>
 </div>
 
 <!-- Sidebar/menu -->
-<nav th:fragment="sidebar" class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="sidebar"><br>
+<nav th:fragment="sidebar" class="w3-sidebar w3-collapse w3-white sidebar-size" style="z-index:3;" id="sidebar"><br> <!-- w3-animate-left -->
     <div class="w3-bar-block">
-        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>Close Menu</a>
-        <a href="/" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Overview</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Views</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Traffic</a>
-        <a href="/geo" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  Geo</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  Orders</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  News</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  General</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  History</a>
-        <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
+        <a pagenum="0" href="/" class="w3-bar-item w3-button w3-padding"><i class="fa fa-dashboard"></i>  Home</a>
+        <a pagenum="1" href="/employee" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Employee</a>
+        <a pagenum="2" href="/geo" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  Geo</a>
     </div>
+    <script th:inline="javascript">
+        function hideOrShowSidebar() {
+            if (sidebar.classList.contains("hide-sidebar")) {
+                showSidebar();
+                sessionStorage.setItem('sidebarStatus', 'open');
+            } else {
+                hideSidebar();
+                sessionStorage.setItem('sidebarStatus', 'close');
+            }
+        }
+        function showSidebar() {
+            if (sidebar.classList.contains("hide-sidebar")) {
+                sidebar.classList.remove("hide-sidebar");
+            }
+            if (!pageContent.classList.contains("pageContent-withSidebar")) {
+                pageContent.classList.add("pageContent-withSidebar");
+            }
+        }
+        function hideSidebar() {
+            if (!sidebar.classList.contains("hide-sidebar")) {
+                sidebar.classList.add("hide-sidebar");
+            }
+            if (pageContent.classList.contains("pageContent-withSidebar")) {
+                pageContent.classList.remove("pageContent-withSidebar");
+            }
+        }
+    </script>
 </nav>
-
 
 <!-- Table -->
 <div th:attr="id=${tableId}" th:fragment="table(data, tableId)" class="w3-container">
     <h5 th:text="${data.title}"></h5>
-    <p>
-        <button class="w3-button w3-blue w3-round-xlarge" style="z-index:0" onclick="openModal(event, null)">Add Region</button>
+    <div th:if="${data.isSearchEnabled}" th:id="${tableId}+'SearchForm'" class="w3-container">
+        <div class="w3-flex w3-padding-16">
+            <div>
+                <button th:data-tableId="${tableId}" class="w3-btn w3-round w3-blue" onclick="searchWithPagination(event, this)">Search</button>
+            </div>
+            <div th:data-tableId="${tableId}" th:id="${tableId}+'DownloadCsv'" style="margin-left: auto; align-content: center;">
+                <a th:href="${data.pathToDownloadCsv + '/download-csv'}" th:download="${data.filename}" type="text/csv">
+                    <i class="fa-solid fa-file-csv fa-xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <p th:if="${data.canAddRow}">
+        <button th:id="${tableId}+'AddButton'" th:text="${data.addButtonText}" class="w3-button w3-blue w3-round-xlarge" style="z-index:0" onclick="openModal(event, null)"></button>
     </p>
     <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+        <tr th:if="${!(data.headers == null || data.headers.isEmpty())}" class="w3-light-blue">
+            <th th:each="header: ${data.headers}" th:text="${header}"></th>
+            <th th:if="${data.canBeModified}"></th>
+        </tr>
         <tr th:each="row, rowStats : ${data.rows}">
             <td th:each="column : ${row.columnValues}" th:text="${column}"></td>
             <td th:if="${data.canBeModified}">
-                <i class="fa-solid fa-pencil fa-fw w3-text-blue" th:onclick="|openModal(event, ${rowStats.index})|"></i>
+                <i th:id="${tableId}+'ModifyIcon'" class="fa-solid fa-pencil fa-fw w3-text-blue" th:onclick="|openModal(event, ${rowStats.index})|"></i>
             </td>
         </tr>
     </table>
     <br>
+    <!-- Pagination -->
+    <div th:if="${!data.pagination.getPages().isEmpty()}" class="w3-center" style="width: 100%;">
+            <div class="w3-bar">
+                <a th:data-page="${data.pagination.getPages().getFirst()}" th:data-tableId="${tableId}" th:onclick="|searchWithPagination(event, this)|" th:if="${data.pagination.isFirstPageMultipleOfFive}" class="w3-button">&laquo;</a>
+                <a th:each="page : ${data.pagination.getInternalPages()}" th:data-page="${page}" th:data-tableId="${tableId}" th:onclick="|searchWithPagination(event, this)|" class="w3-button" th:text="${page + 1}" th:classappend="${data.pagination.currentPage == page}? 'w3-blue'"></a>
+                <a th:data-page="${data.pagination.getPages().getLast()}" th:data-tableId="${tableId}" th:onclick="|searchWithPagination(event, this)|" th:if="${data.pagination.isLastPageMultipleOfFivePlusOne}" class="w3-button">&raquo;</a>
+            </div>
+    </div>
+    <!-- End Pagination -->
     <script th:inline="javascript">
-        function openModal(event, rowPosition) {
-            if (rowPosition == null)
-                modalEvent = new CustomEvent('createModal', { bubbles: true });
-            else
-                modalEvent = new CustomEvent('modifyModal', { bubbles: true, detail: { numRow: rowPosition }});
-            event.target.dispatchEvent(modalEvent);
-        }
-
         tableId = [[${tableId}]];
-        window[tableId]=JSON.parse([[${data.json}]]);
+        window[tableId]=JSON.parse([[${data.json} == null ? '{}' : ${data.json}]]);
+        form = tableId+'Form';
+        window[form] = JSON.parse([[${data.form} == null ? '{}' : ${data.form.json}]]);
+        searchEnabled = [[${data.isSearchEnabled}]];
+        searchForm = JSON.parse([[${data.searchForm} == null ? '{}' : ${data.searchForm.json}]]);
+        if (searchEnabled)
+            populateForm(tableId+'SearchForm', searchForm, null);
     </script>
+    <!-- End Modal Form -->
 </div>

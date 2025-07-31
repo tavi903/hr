@@ -36,7 +36,7 @@ public class LocationController {
     @RolesAllowed(MANAGER_ROLE)
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LocationDto> update(@Validated @RequestBody LocationDto locationDto) {
-        LocationDto regionCreated = locationService.createOrUpdate(locationDto);
+        LocationDto regionCreated = locationService.update(locationDto);
         return ResponseEntity.ok(regionCreated);
     }
 
